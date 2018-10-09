@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Cedric DELGEHIER <cedric@openio.io>
-  description: PURPOSE
+  description: Provides namespace file for OpenIO SDS
   company: OpenIO
   license: Apache
 

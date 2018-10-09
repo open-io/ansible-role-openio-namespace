@@ -1,6 +1,0 @@
-# roles/ROLENAME/vars/Debian.yml
-# Distribution-specific variables for Ubuntu, Debian, ...
----
-ROLENAME_packages:
-  - openio-ROLENAME
-...

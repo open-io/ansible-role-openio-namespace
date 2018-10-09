@@ -1,12 +1,5 @@
-# roles/ROLENAME/tasks/main.yml
+# roles/namespace/tasks/main.yml
 ---
-- name: "Include {{ ansible_distribution }} variables"
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-  tags: install
-
 - name: Create the 'openio' group
   group:
     name: openio
@@ -21,22 +14,13 @@
     group: openio
   tags: install
 
-- name: "Include {{ ansible_distribution }} tasks"
-  include_tasks: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-  tags: install
-
 - name: Test directories presence
   stat:
     path: "{{ item }}"
   register: _dir
   with_items:
-    - "/etc/gridinit.d/{{ openio_ROLENAME_namespace }}"
-    - "{{ openio_ROLENAME_sysconfig_dir }}/ROLENAME-{{ openio_ROLENAME_serviceid }}"
-    #- "{{ openio_ROLENAME_volume }}"
-    - "/var/log/oio/sds/{{ openio_ROLENAME_namespace }}/ROLENAME-{{ openio_ROLENAME_serviceid }}"
+    - "/etc/oio/sds.conf.d"
+  tags: install
 
 - name: Ensure directories exists
   file:
@@ -58,17 +42,7 @@
     group: openio
     mode: 0644
   with_items:
-    - src: "ROLENAME.conf.j2"
-      dest: "{{ openio_ROLENAME_sysconfig_dir }}/\
-        ROLENAME-{{ openio_ROLENAME_serviceid }}/ROLENAME-{{ openio_ROLENAME_serviceid }}.conf"
-    - src: "gridinit_ROLENAME.conf.j2"
-      dest: "{{ openio_ROLENAME_gridinit_dir }}/ROLENAME-{{ openio_ROLENAME_serviceid }}.conf"
-  register: _ROLENAME_conf
-
-- name: restart ROLENAME
-  shell: |
-    gridinit_cmd reload
-    gridinit_cmd restart  {{openio_ROLENAME_namespace}}-ROLENAME-{{openio_ROLENAME_serviceid}}
-  when: _ROLENAME_conf.changed
-  tags: configure
+    - src: "namespace.j2"
+      dest: "/etc/oio/sds.conf.d/{{ openio_namespace_name }}"
+  register: _namespace_conf
 ...

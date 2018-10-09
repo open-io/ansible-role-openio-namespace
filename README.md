@@ -1,70 +1,7 @@
+[![Build Status](https://travis-ci.org/open-io/ansible-role-openio-namespace.svg?branch=master)](https://travis-ci.org/open-io/ansible-role-openio-namespace)
+# Ansible role `namespace`
 
-> **Remove this part after a clone**
-
-```sh
-git clone git@github.com:open-io/ansible-role-openio-skeleton.git ROLENAME
-cd ROLENAME
-grep -r -E '\b[A-Z]+\b' --exclude=LICENSE *
-find $PWD -type f -print0 | xargs -0 sed -i -e 's@ROLENAME@trueName@g'
-git remote -v
-git remote set-url origin git@github.com:open-io/ansible-role-openio-ROLENAME.git
-
-vi meta/main.yml # change purpose and tags
-vi README.md
-git worktree add docker-tests origin/docker-tests
-```
-
-It is **required** to:
-  - Change the author
-  - Choose one or many maintainers
-  - Change the purpose
-  - Change the rolename
-  - Inform the responsibilities of this role (README)
-  - Feed the `Role Variables` table (README)
-  - Add one or more examples of playbook (README)
-  - Activate tests in Travis CI
-  - Write functional tests in the branch `docker-tests`
-
-It is **recommended** to:
-  - Setup tests on your local machine (see below)
-
-> Use the following instructions to setup your testing environment
-> (make sure virtualenv2 is installed)
->
-```sh
-virtualenv2 env && source env/bin/activate
-pip install yamllint ansible-lint
-# Run tests run before each commit
-export HOOK=".git/hooks/prepare-commit-msg"
-if [ ! -f "$HOOK" ] ; then echo "#\!/bin/sh" > "$HOOK" && chmod +x "$HOOK"; fi
-cat << \EOF >> .git/hooks/prepare-commit-msg
-cmds=("ansible-lint . -x ANSIBLE0016" "yamllint -c .yamllint .")
-for cmd in "${cmds[@]}"; do
-  echo "Running ${cmd%% *}"
-  cmd_out="$($cmd)"
-  echo -n "${cmd_out}"
-  if [ "$cmd_out" ]; then
-      echo -e "\nRejecting commit: ${cmd%% *} returned errors"
-      exit 1
-  fi
-done
-EOF
-```
-
-#### `Role Variables` table
-```sh
-for i in $(grep -E "^openio_" defaults/main.yml |cut -d':' -f1| sort); do echo '|' '`'$i'`'' | `'$(grep $i defaults/main.yml|cut -d: -f2|sed -e "s/^ //")'` | ... |'; done
-```
-
------REMOVE--THE---8<-----PREVIOUS---PART------
-__
-
-[![Build Status](https://travis-ci.org/open-io/ansible-role-openio-ROLENAME.svg?branch=master)](https://travis-ci.org/open-io/ansible-role-openio-ROLENAME)
-# Ansible role `ROLENAME`
-
-An Ansible role for PURPOSE. Specifically, the responsibilities of this role are to:
-
--
+An Ansible role for write the file namespace used in OpenIO SDS
 
 ## Requirements
 
@@ -75,7 +12,17 @@ An Ansible role for PURPOSE. Specifically, the responsibilities of this role are
 
 | Variable   | Default | Comments (type)  |
 | :---       | :---    | :---             |
-| `openio_ROLENAME_...` | `...`   | ...              |
+| `openio_namespace_chunk_size_megabytes` | `100` | Size of chunk in mega-bytes |
+| `openio_namespace_conscience_url` | `"{{ ansible_default_ipv4.address }}:6000` | IP-Port of conscience |
+| `openio_namespace_ecd_url` | `""` | IP-Port of ecd daemon |
+| `openio_namespace_event_agent_url` | `"beanstalk` | URI of event agent |
+| `openio_namespace_meta1_digits` | `2` | Number of digits to agregate meta1 databases [1..4]|
+| `openio_namespace_name` | `"OPENIO"` | Namespace context |
+| `openio_namespace_oioproxy_url` | `"{{ ansible_default_ipv4.address }}:6006` | IP-Port of oioproxy daemon |
+| `openio_namespace_service_update_policy` | `dict` | The service update policy |
+| `openio_namespace_storage_policy` | `"THREECOPIES"` | The storage policy |
+| `openio_namespace_udp_allowed` | `"yes"` | Allow UDP |
+| `openio_namespace_zookeeper_url` | `""` | Tuple of zookeepers addresses and port (comma separated) |
 
 ## Dependencies
 
@@ -88,7 +35,17 @@ No dependencies.
   gather_facts: true
   become: true
   roles:
-    - role: ROLENAME
+    - role: namespace
+      openio_namespace_name: "FOO"
+      openio_namespace_conscience_url: "{{ ansible_default_ipv4.address }}:6000"
+      openio_namespace_zookeeper_url: ""
+      openio_namespace_oioprxy_url: "{{ ansible_default_ipv4.address }}:6006"
+      openio_namespace_event_agent_url: "beanstalk://{{ ansible_default_ipv4.address }}:6014"
+      openio_namespace_ecd_url: "{{ ansible_default_ipv4.address }}:6017"
+      openio_namespace_meta1_digits: 1
+      openio_namespace_udp_allowed: "yes"
+      openio_namespace_storage_policy: "THREECOPIES"
+      openio_namespace_chunk_size_megabytes: 50
 ```
 
 
@@ -112,7 +69,3 @@ Apache License, Version 2.0
 ## Contributors
 
 - [Cedric DELGEHIER](https://github.com/cdelgehier) (maintainer)
-- [Romain ACCIARI](https://github.com/racciari) (maintainer)
-- [Vincent LEGOLL](https://github.com/vincent-legoll) (maintainer)
-- [Sebastien LAPIERRE](https://github.com/sebastienlapierre) (maintainer)
-- [Geoffrey TIEN](https://github.com/GeoffreyTien) (maintainer)
