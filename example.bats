@@ -4,12 +4,12 @@
 # address of the System Under Test.
 
 # Tests
-
-@test 'NAME - test1' {
-  run bash -c "docker exec -ti ${SUT_ID} cat /etc/foo"
+@test 'NAMESPACE - basic test' {
+  run bash -c "docker exec -ti ${SUT_ID} cat /etc/oio/sds.conf.d/TRAVIS"
   echo "output: "$output
   echo "status: "$status
   [[ "${status}" -eq "0" ]]
-  [[ "${output}" =~ 'String in the output1' ]]
-  [[ "${output}" =~ 'String in the output2' ]]
+  [[ "${output}" =~ 'TRAVIS' ]]
+  [[ "${output}" =~ '#zookeeper' ]]
 }
+
