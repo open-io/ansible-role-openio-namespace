@@ -20,4 +20,6 @@ openio_namespace_service_update_policy:
     policy: KEEP
     replicas: 1
     distance: 1
+
+openio_namespace_options: []
 ...

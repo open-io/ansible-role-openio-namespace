@@ -13,3 +13,7 @@ ns.meta1_digits={{ openio_namespace_meta1_digits }}
 ns.storage_policy={{ openio_namespace_storage_policy }}
 ns.chunk_size={{ (openio_namespace_chunk_size_megabytes | int) * 1024 * 1024 }}
 ns.service_update_policy={% for servicetype in openio_namespace_service_update_policy %}{{ servicetype.name }}={{ servicetype.policy }}|{{ servicetype.replicas }}|{{ servicetype.distance }}|;{% endfor %}
+
+{% for option in openio_namespace_options %}
+{{ option }}
+{% endfor %}
