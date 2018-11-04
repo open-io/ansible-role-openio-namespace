@@ -35,6 +35,12 @@
     - "/etc/oio/sds.conf.d"
   tags: install
 
+- name: Test namespace file
+  stat:
+    path: "/etc/oio/sds.conf.d/{{ openio_namespace_name }}"
+  register: _ns
+  tags: install
+
 - name: Ensure directories exists
   file:
     path: "{{ item.item }}"
@@ -49,13 +55,10 @@
 
 - name: Generate configuration files
   template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: "namespace.j2"
+    dest: "/etc/oio/sds.conf.d/{{ openio_namespace_name }}"
     owner: openio
     group: openio
     mode: 0644
-  with_items:
-    - src: "namespace.j2"
-      dest: "/etc/oio/sds.conf.d/{{ openio_namespace_name }}"
-  register: _namespace_conf
+  when: not _ns.stat.exists or openio_namespace_overwrite
 ...

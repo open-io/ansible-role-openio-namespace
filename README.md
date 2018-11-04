@@ -19,6 +19,7 @@ An Ansible role for write the file namespace used in OpenIO SDS
 | `openio_namespace_meta1_digits` | `2` | Number of digits to agregate meta1 databases [1..4]|
 | `openio_namespace_name` | `"OPENIO"` | Namespace context |
 | `openio_namespace_oioproxy_url` | `"{{ ansible_default_ipv4.address }}:6006` | IP-Port of oioproxy daemon |
+| `openio_namespace_overwrite` | `false` | Overwrite a NS file |
 | `openio_namespace_service_update_policy` | `dict` | The service update policy |
 | `openio_namespace_storage_policy` | `"THREECOPIES"` | The storage policy |
 | `openio_namespace_udp_allowed` | `"yes"` | Allow UDP |

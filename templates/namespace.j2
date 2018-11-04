@@ -4,7 +4,7 @@
 conscience={{ openio_namespace_conscience_url }}
 {{ '#' if not openio_namespace_zookeeper_url else '' }}zookeeper={{ openio_namespace_zookeeper_url }}
 proxy={{ openio_namespace_oioproxy_url }}
-event-agent={{ openio_namespace_event_agent_url }}
+{{ '#' if not openio_namespace_event_agent_url else '' }}event-agent={{ openio_namespace_event_agent_url }}
 {{ '#' if not openio_namespace_ecd_url else '' }}ecd={{ openio_namespace_ecd_url }}
 
 udp_allowed={{ openio_namespace_udp_allowed }}
