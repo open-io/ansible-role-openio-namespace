@@ -1,10 +1,12 @@
-# Test playbook
 ---
 - hosts: all
   become: true
+  vars:
+    NS: TRAVIS
   roles:
+    - role: users
     - role: role_under_test
-      openio_namespace_name: "TRAVIS"
+      openio_namespace_name: "{{ NS }}"
       openio_namespace_conscience_url: "{{ ansible_default_ipv4.address }}:6000"
       openio_namespace_zookeeper_url: ""
       openio_namespace_oioproxy_url: "{{ ansible_default_ipv4.address }}:6006"
