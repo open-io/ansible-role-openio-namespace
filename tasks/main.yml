@@ -1,19 +1,5 @@
 # roles/namespace/tasks/main.yml
 ---
-- name: Create the 'openio' group
-  group:
-    name: openio
-    gid: "{{ openio_group_openio_gid | default('220')}}"
-  tags: install
-
-- name: Create the 'openio' user
-  user:
-    name: openio
-    comment: "openio account"
-    uid: "{{ openio_user_openio_uid | default('120')}}"
-    group: openio
-  tags: install
-
 - name: Install package for Erasure Code
   package:
     name: "{{ 'libisal' if ansible_os_family == 'RedHat' else 'libisal2' }}"
@@ -27,30 +13,15 @@
   retries: 5
   delay: 2
 
-- name: Test directories presence
-  stat:
-    path: "{{ item }}"
-  register: _dir
-  with_items:
-    - "/etc/oio/sds.conf.d"
-  tags: install
-
-- name: Test namespace file
-  stat:
-    path: "/etc/oio/sds.conf.d/{{ openio_namespace_name }}"
-  register: _ns
-  tags: install
-
 - name: Ensure directories exists
   file:
-    path: "{{ item.item }}"
+    path: "{{ item.path }}"
     state: directory
-    owner: openio
-    group: openio
-    mode: 0755
-    recurse: true
-  with_items: "{{ _dir.results }}"
-  when: not item.stat.exists
+    owner: "{{ item.owner | default('openio') }}"
+    group: "{{ item.group | default('openio') }}"
+    mode: "{{ item.mode | default(0755) }}"
+  with_items:
+    - path: "/etc/oio/sds.conf.d"
   tags: install
 
 - name: Generate configuration files
@@ -60,5 +31,16 @@
     owner: openio
     group: openio
     mode: 0644
-  when: not _ns.stat.exists or openio_namespace_overwrite
+    force: "{{ openio_namespace_overwrite }}"
+  register: _ns
+  tags: configure
+
+- name: restart oioproxy
+  shell: |
+    gridinit_cmd reload
+    gridinit_cmd restart {{ openio_namespace_name }}-oioproxy-0
+  when:
+    - _ns.changed
+  ignore_errors: true # oioproxy is not necessarily present
+  tags: configure
 ...
