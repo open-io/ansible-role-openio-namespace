@@ -41,6 +41,6 @@
     gridinit_cmd restart {{ openio_namespace_name }}-oioproxy-0
   when:
     - _ns.changed
-  ignore_errors: true # oioproxy is not necessarily present
+  ignore_errors: true  # oioproxy is not necessarily present
   tags: configure
 ...
