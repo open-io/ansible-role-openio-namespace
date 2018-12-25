@@ -33,18 +33,21 @@ No dependencies.
 
 ```yaml
 - hosts: all
-  gather_facts: true
   become: true
+  vars:
+    NS: OPENIO
   roles:
-    - role: namespace
-      openio_namespace_name: "FOO"
+    - role: users
+    - role: role_under_test
+      openio_namespace_name: "{{ NS }}"
       openio_namespace_conscience_url: "{{ ansible_default_ipv4.address }}:6000"
       openio_namespace_zookeeper_url: ""
-      openio_namespace_oioprxy_url: "{{ ansible_default_ipv4.address }}:6006"
+      openio_namespace_oioproxy_url: "{{ ansible_default_ipv4.address }}:6006"
       openio_namespace_event_agent_url: "beanstalk://{{ ansible_default_ipv4.address }}:6014"
       openio_namespace_ecd_url: "{{ ansible_default_ipv4.address }}:6017"
       openio_namespace_meta1_digits: 1
       openio_namespace_udp_allowed: "yes"
+
       openio_namespace_storage_policy: "THREECOPIES"
       openio_namespace_chunk_size_megabytes: 50
 ```
