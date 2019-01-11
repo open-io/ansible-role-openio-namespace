@@ -5,6 +5,12 @@
     NS: TRAVIS
   roles:
     - role: users
+    - role: repo
+      openio_repository_openstack_release: 'queens'
+      openio_repository_no_log: false
+      openio_repository_products:
+        sds:
+          release: "18.10"
     - role: role_under_test
       openio_namespace_name: "{{ NS }}"
       openio_namespace_conscience_url: "{{ ansible_default_ipv4.address }}:6000"
