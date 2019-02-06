@@ -8,6 +8,7 @@ openio_namespace_event_agent_url: "beanstalk://{{ ansible_default_ipv4.address }
 openio_namespace_ecd_url: ""
 openio_namespace_meta1_digits: 2
 openio_namespace_udp_allowed: "yes"
+openio_namespace_provision_only: false
 
 openio_namespace_storage_policy: "THREECOPIES"
 openio_namespace_chunk_size_megabytes: 100

@@ -24,6 +24,7 @@ An Ansible role for write the file namespace used in OpenIO SDS
 | `openio_namespace_storage_policy` | `"THREECOPIES"` | The storage policy |
 | `openio_namespace_udp_allowed` | `"yes"` | Allow UDP |
 | `openio_namespace_zookeeper_url` | `""` | Tuple of zookeepers addresses and port (comma separated) |
+| `openio_namespace_provision_only` | `false` | Provision only without restarting / bootstrapping |
 
 ## Dependencies
 
