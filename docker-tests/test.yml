@@ -1,0 +1,45 @@
+---
+- name: generate zk group
+  hosts: all
+  gather_facts: false
+  tasks:
+    - add_host:
+        name: "{{ item.name }}"
+        ansible_host: "{{ item.openio_bind_address }}"
+        openio_bind_address: "{{ item.openio_bind_address }}"
+        groups: zookeeper
+      with_items:
+        - { name: "node1", openio_bind_address: "172.17.0.2" }
+        - { name: "node2", openio_bind_address: "172.17.0.3" }
+        - { name: "node3", openio_bind_address: "172.17.0.4" }
+        - { name: "node4", openio_bind_address: "172.17.0.5" }
+        - { name: "node5", openio_bind_address: "172.17.0.6" }
+        - { name: "node6", openio_bind_address: "172.17.0.7" }
+      delegate_to: localhost
+      run_once: true
+      changed_when: false
+
+- hosts: localhost
+  become: true
+  vars:
+    NS: TRAVIS
+  roles:
+    - role: users
+    - role: repo
+      openio_repository_openstack_release: 'queens'
+      openio_repository_no_log: false
+      openio_repository_products:
+        sds:
+          release: "18.10"
+    - role: role_under_test
+      openio_namespace_name: "{{ NS }}"
+      openio_namespace_conscience_url: "{{ ansible_default_ipv4.address }}:6000"
+      openio_namespace_oioproxy_url: "{{ ansible_default_ipv4.address }}:6006"
+      openio_namespace_event_agent_url: "beanstalk://{{ ansible_default_ipv4.address }}:6014"
+      openio_namespace_ecd_url: "{{ ansible_default_ipv4.address }}:6017"
+      openio_namespace_meta1_digits: 1
+      openio_namespace_udp_allowed: "yes"
+
+      openio_namespace_storage_policy: "THREECOPIES"
+      openio_namespace_chunk_size_megabytes: 50
+...

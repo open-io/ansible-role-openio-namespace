@@ -1,17 +1,24 @@
 # roles/namespace/defaults/main.yml
 ---
-openio_namespace_name: "OPENIO"
-openio_namespace_conscience_url: "{{ ansible_default_ipv4.address }}:6000"
-openio_namespace_zookeeper_url: ""
-openio_namespace_oioproxy_url: "{{ ansible_default_ipv4.address }}:6006"
-openio_namespace_event_agent_url: "beanstalk://{{ ansible_default_ipv4.address }}:6014"
-openio_namespace_ecd_url: ""
-openio_namespace_meta1_digits: 2
+openio_namespace_name: "{{ namespace | default('OPENIO') }}"
+openio_namespace_conscience_url: "{{ openio_bind_virtual_address | d(ansible_default_ipv4.address) }}:6000"
+openio_namespace_zookeeper_groupname: zookeeper
+openio_namespace_zookeeper_url: "{{ openio_zookeeper_addresses_chain \
+  | default(groups[openio_namespace_zookeeper_groupname] \
+  | map('extract', hostvars, ['openio_bind_address']) \
+  | map('regex_replace', '$', ':6005') \
+  | list \
+  | ns_join_by(3) ) }}"
+openio_namespace_oioproxy_url: "{{ openio_bind_address | d(ansible_default_ipv4.address) }}:6006"
+openio_namespace_event_agent_url: "beanstalk://{{ openio_bind_address | d(ansible_default_ipv4.address) }}:6014"
+openio_namespace_ecd_url: "{% if groups.ecd is defined and groups.ecd | bool %}\
+  {{ openio_bind_address | d(ansible_default_ipv4.address) }}:6017{% endif %}"
+openio_namespace_meta1_digits: "{{ namespace_meta1_digits  | d(2) }}"
 openio_namespace_udp_allowed: "yes"
 openio_namespace_provision_only: false
 
-openio_namespace_storage_policy: "THREECOPIES"
-openio_namespace_chunk_size_megabytes: 100
+openio_namespace_storage_policy: "{{ namespace_storage_policy | d('THREECOPIES') }}"
+openio_namespace_chunk_size_megabytes: "{{ namespace_chunk_size_megabytes | int | d(100) }}"
 openio_namespace_service_update_policy:
   - name: meta2
     policy: KEEP

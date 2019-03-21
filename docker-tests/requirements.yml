@@ -1,0 +1,13 @@
+---
+- src: https://github.com/open-io/ansible-role-openio-repository.git
+  version: master
+  name: repository
+
+- src: https://github.com/open-io/ansible-role-openio-repository.git
+  version: master
+  name: repo
+
+- src: https://github.com/open-io/ansible-role-openio-users.git
+  version: master
+  name: users
+...
