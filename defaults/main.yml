@@ -4,7 +4,7 @@ openio_namespace_name: "{{ namespace | default('OPENIO') }}"
 openio_namespace_conscience_url: "{{ openio_bind_virtual_address | d(ansible_default_ipv4.address) }}:6000"
 openio_namespace_zookeeper_groupname: zookeeper
 openio_namespace_zookeeper_url: "{{ openio_zookeeper_addresses_chain \
-  | default(groups[openio_namespace_zookeeper_groupname] \
+  | default(groups[openio_namespace_zookeeper_groupname] | default([]) \
   | map('extract', hostvars, ['openio_bind_address']) \
   | map('regex_replace', '$', ':6005') \
   | list \
@@ -18,7 +18,7 @@ openio_namespace_udp_allowed: "yes"
 openio_namespace_provision_only: false
 
 openio_namespace_storage_policy: "{{ namespace_storage_policy | d('THREECOPIES') }}"
-openio_namespace_chunk_size_megabytes: "{{ namespace_chunk_size_megabytes | int | d(100) }}"
+openio_namespace_chunk_size_megabytes: "{{ namespace_chunk_size_megabytes | d(100) | int }}"
 openio_namespace_service_update_policy:
   - name: meta2
     policy: KEEP
