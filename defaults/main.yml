@@ -11,7 +11,7 @@ openio_namespace_zookeeper_url: "{{ openio_zookeeper_addresses_chain \
   | ns_join_by(3) ) }}"
 openio_namespace_oioproxy_url: "{{ openio_bind_address | d(ansible_default_ipv4.address) }}:6006"
 openio_namespace_event_agent_url: "beanstalk://{{ openio_bind_address | d(ansible_default_ipv4.address) }}:6014"
-openio_namespace_ecd_url: "{% if groups.ecd is defined and groups.ecd | bool %}\
+openio_namespace_ecd_url: "{% if groups.ecd is defined and groups.ecd %}\
   {{ openio_bind_address | d(ansible_default_ipv4.address) }}:6017{% endif %}"
 openio_namespace_meta1_digits: "{{ namespace_meta1_digits  | d(2) }}"
 openio_namespace_udp_allowed: "yes"
