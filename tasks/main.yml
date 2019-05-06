@@ -36,7 +36,7 @@
 - name: restart oioproxy
   shell: |
     gridinit_cmd reload
-    gridinit_cmd restart {{ openio_namespace_name }}-oioproxy-0
+    gridinit_cmd restart {{ openio_namespace_name }}-oioproxy-{{ 0 + openio_legacy_serviceid | d(0) | int }}
   when:
     - _ns.changed
     - not openio_namespace_provision_only
