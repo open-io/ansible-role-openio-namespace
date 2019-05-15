@@ -23,7 +23,7 @@ openio_namespace_service_update_policy:
   - name: meta2
     policy: KEEP
     replicas: 3
-    distance: 1
+    distance: 2
   - name: rdir
     policy: KEEP
     replicas: 1
