@@ -1,7 +1,30 @@
 # roles/namespace/defaults/main.yml
 ---
 openio_namespace_name: "{{ namespace | default('OPENIO') }}"
-openio_namespace_conscience_url: "{{ openio_bind_virtual_address | d(ansible_default_ipv4.address) }}:6000"
+openio_namespace_conscience_url: >-
+  {% set _var = ansible_default_ipv4.address + ':6000' -%}
+  {% if openio_conscience_multiple_enable | default(false) -%}
+  {%   if groups[openio_namespace_conscience_groupname] is defined -%}
+  {%     if groups[openio_namespace_conscience_groupname] -%}
+  {%       set list_ip = groups[openio_namespace_conscience_groupname]
+                           | map('extract', hostvars, ['openio_bind_address']) | list -%}
+  {%       if inventory_hostname in groups[openio_namespace_conscience_groupname] -%}
+  {%         set _var = openio_bind_address + ':6000,' + list_ip | difference([openio_bind_address])
+                          | map('regex_replace', '$', ':6000') | shuffle(seed=inventory_hostname) | join(',') -%}
+  {%       else -%}
+  {%         set _var = list_ip | difference([openio_bind_address])
+                          | map('regex_replace', '$', ':6000') | shuffle(seed=inventory_hostname) | join(',') -%}
+  {%       endif -%}
+  {%     endif -%}
+  {%   endif -%}
+  {% else -%}
+  {%   if openio_bind_virtual_address is defined -%}
+  {%     set _var = openio_bind_virtual_address + ':6000' -%}
+  {%   endif -%}
+  {% endif -%}
+  {{ _var }}
+
+openio_namespace_conscience_groupname: conscience
 openio_namespace_zookeeper_groupname: zookeeper
 openio_namespace_zookeeper_url: "{{ openio_zookeeper_addresses_chain \
   | default(groups[openio_namespace_zookeeper_groupname] | default([]) \

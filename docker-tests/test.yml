@@ -19,21 +19,38 @@
       run_once: true
       changed_when: false
 
+    #- add_host:
+    #    name: "{{ item.name }}"
+    #    ansible_host: "{{ item.openio_bind_address }}"
+    #    openio_bind_address: "{{ item.openio_bind_address }}"
+    #    groups: conscience
+    #  with_items:
+    #    - { name: "node1", openio_bind_address: "172.17.0.2" }
+    #    - { name: "localhost", openio_bind_address: "172.17.0.3" }
+    #    - { name: "node3", openio_bind_address: "172.17.0.4" }
+    #  delegate_to: localhost
+    #  run_once: true
+    #  changed_when: false
+
+
 - hosts: localhost
   become: true
   vars:
     NS: TRAVIS
+    #openio_bind_virtual_address: "172.17.0.100"
+    #openio_bind_address: "172.17.0.3"
+    #openio_conscience_multiple:
+    #  me: "172.17.0.2:6600"
+    #  group:
+    #    - 172.17.0.3:6600
+    #    - 172.17.0.4:6600
   roles:
     - role: users
     - role: repo
-      openio_repository_openstack_release: 'queens'
       openio_repository_no_log: false
-      openio_repository_products:
-        sds:
-          release: "18.10"
+      openio_repository_mirror_host: mirror2.openio.io
     - role: role_under_test
       openio_namespace_name: "{{ NS }}"
-      openio_namespace_conscience_url: "{{ ansible_default_ipv4.address }}:6000"
       openio_namespace_oioproxy_url: "{{ ansible_default_ipv4.address }}:6006"
       openio_namespace_event_agent_url: "beanstalk://{{ ansible_default_ipv4.address }}:6014"
       openio_namespace_ecd_url: "{{ ansible_default_ipv4.address }}:6017"
