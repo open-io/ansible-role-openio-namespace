@@ -52,7 +52,8 @@ openio_namespace_service_update_policy:
     replicas: 1
     distance: 1
 
-openio_namespace_options: []
+openio_namespace_options:
+  - "sqliterepo.repo.soft_max=1000"
 
 openio_namespace_overwrite: false
 ...
