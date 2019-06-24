@@ -54,6 +54,7 @@ openio_namespace_service_update_policy:
 
 openio_namespace_options:
   - "sqliterepo.repo.soft_max=1000"
+  - "sqliterepo.repo.hard_max=1000"
 
 openio_namespace_overwrite: false
 ...
