@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from six.moves import map
 
 class FilterModule(object):
     def filters(self):
@@ -10,7 +11,7 @@ class FilterModule(object):
     def join_by(self, mylist=[], group_by=3, D=',', d=';'):
         list_grouped_by_comma=[]
         if len(mylist) % group_by == 0:
-            for i in range(len(mylist) / group_by):
+            for i in range(int(len(mylist) / group_by)):
                 list_grouped_by_comma.append(D.join(map(str, mylist[(i * group_by):(i * group_by + group_by)])))
 
         return d.join(map(str, list_grouped_by_comma))
