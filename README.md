@@ -5,7 +5,7 @@ An Ansible role for write the file namespace used in OpenIO SDS
 
 ## Requirements
 
-- Ansible 2.4+
+- Ansible 2.9+
 
 ## Role Variables
 
