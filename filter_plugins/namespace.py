@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 from six.moves import map
 
 class FilterModule(object):
