@@ -29,7 +29,7 @@ openio_namespace_zookeeper_groupname: zookeeper
 openio_namespace_zookeeper_url: "{{ openio_zookeeper_addresses_chain \
   | default(groups[openio_namespace_zookeeper_groupname] | default([]) \
   | map('extract', hostvars, ['openio_bind_address']) \
-  | map('regex_replace', '$', ':6005') \
+  | map('regex_replace', '$', ':' ~ default_openio_zookeeper_global_bind_port | d(6005) ) \
   | list \
   | ns_join_by(3) ) }}"
 openio_namespace_oioproxy_url: "{{ openio_bind_address | d(ansible_default_ipv4.address) }}:6006"
