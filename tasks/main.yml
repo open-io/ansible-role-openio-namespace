@@ -41,6 +41,12 @@
   when:
     - _ns.changed
     - not openio_namespace_provision_only
-  ignore_errors: true  # oioproxy is not necessarily present
+  register: _restart_oioproxy
+  failed_when:
+    - _restart_oioproxy.rc != 0
+    # resource oioproxy not found
+    - not 'No such file or directory' in _restart_oioproxy.stdout
+    # gridinit not found
+    - not 'not found' in _restart_oioproxy.stderr
   tags: configure
 ...
