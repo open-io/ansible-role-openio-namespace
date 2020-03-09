@@ -14,6 +14,11 @@ ns.storage_policy={{ openio_namespace_storage_policy }}
 ns.chunk_size={{ (openio_namespace_chunk_size_megabytes | int) * 1024 * 1024 }}
 ns.service_update_policy={% for servicetype in openio_namespace_service_update_policy %}{{ servicetype.name }}={{ servicetype.policy }}|{{ servicetype.replicas }}|{{ servicetype.distance }}|;{% endfor %}
 
+
+{{ '#' if not openio_namespace_iam_connection else '' }}iam.connection={{ openio_namespace_iam_connection }}
+{{ '#' if not openio_namespace_container_hierarchy_connection else '' }}container_hierarchy.connection={{ openio_namespace_container_hierarchy_connection }}
+{{ '#' if not openio_namespace_bucketdb_connection else '' }}bucket_db.connection={{ openio_namespace_bucketdb_connection }}
+
 {% for option in openio_namespace_options %}
 {{ option }}
 {% endfor %}
