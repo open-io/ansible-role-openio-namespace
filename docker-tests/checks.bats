@@ -19,3 +19,11 @@
   [[ "${status}" -eq "0" ]]
   [[ "${output}" =~ 'zookeeper=172.17.0.2:6005,172.17.0.3:6005,172.17.0.4:6005;172.17.0.5:6005,172.17.0.6:6005,172.17.0.7:6005' ]]
 }
+
+@test 'NAMESPACE - IAM test' {
+  run bash -c "docker exec -ti ${SUT_ID} cat /etc/oio/sds.conf.d/TRAVIS"
+  echo "output: "$output
+  echo "status: "$status
+  [[ "${status}" -eq "0" ]]
+  [[ "${output}" =~ 'iam.connection=redis+sentinel://172.17.0.2:6012,172.17.0.3:6012,172.17.0.4:6012?sentinel_name=TRAVIS-master-1' ]]
+}

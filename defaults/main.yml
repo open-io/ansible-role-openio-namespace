@@ -57,4 +57,23 @@ openio_namespace_options:
   - "sqliterepo.repo.hard_max=1000"
 
 openio_namespace_overwrite: false
+
+openio_namespace_redis_inventory_groupname: redis
+openio_namespace_iam_connection:
+  "{% if openio_namespace_redis_inventory_groupname in groups
+        and groups[openio_namespace_redis_inventory_groupname] | length >= 3 -%}
+      redis+sentinel://{{ (groups[openio_namespace_redis_inventory_groupname] \
+        | map('extract', hostvars, ['openio_bind_address']) \
+        | map('regex_replace', '$', ':6012') \
+        | join(',')) \
+        ~ '?sentinel_name=' ~ openio_namespace_name ~ '-master-1' }}
+   {% elif openio_namespace_redis_inventory_groupname in groups
+        and groups[openio_namespace_redis_inventory_groupname] | length == 1 -%}
+      redis://{{ groups[openio_namespace_redis_inventory_groupname] \
+        | map('extract', hostvars, ['openio_bind_address']) \
+        | map('regex_replace', '$', ':6011') \
+        | list | first }}
+   {% endif %}"
+openio_namespace_bucketdb_connection: "{{ openio_namespace_iam_connection }}"
+openio_namespace_container_hierarchy_connection: "{{ openio_namespace_iam_connection }}"
 ...
