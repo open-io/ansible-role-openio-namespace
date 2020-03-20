@@ -38,7 +38,7 @@ openio_namespace_ecd_url: "{% if groups.ecd is defined and groups.ecd %}\
   {{ openio_bind_address | d(ansible_default_ipv4.address) }}:6017{% endif %}"
 openio_namespace_meta1_digits: "{{ namespace_meta1_digits  | d(2) }}"
 openio_namespace_udp_allowed: "yes"
-openio_namespace_provision_only: false
+openio_namespace_provision_only: "{{ openio_maintenance_mode | d(false) | bool }}"
 
 openio_namespace_storage_policy: "{{ namespace_storage_policy | d('THREECOPIES') }}"
 openio_namespace_chunk_size_megabytes: "{{ namespace_chunk_size_megabytes | d(100) | int }}"
