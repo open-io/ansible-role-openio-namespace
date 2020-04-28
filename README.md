@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/open-io/ansible-role-openio-namespace.svg?branch=master)](https://travis-ci.org/open-io/ansible-role-openio-namespace)
+[![Build Status](https://travis-ci.org/open-io/ansible-role-openio-namespace.svg?branch=20.04)](https://travis-ci.org/open-io/ansible-role-openio-namespace)
 # Ansible role `namespace`
 
 An Ansible role for write the file namespace used in OpenIO SDS
