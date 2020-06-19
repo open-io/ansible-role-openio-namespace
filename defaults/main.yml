@@ -56,6 +56,7 @@ openio_namespace_options:
   - "sqliterepo.repo.soft_max=1000"
   - "sqliterepo.repo.hard_max=1000"
   - "sqliterepo.cache.kbytes_per_db=4096"
+  - "proxy.prefer.slave_for_read=true"
 
 openio_namespace_overwrite: false
 
