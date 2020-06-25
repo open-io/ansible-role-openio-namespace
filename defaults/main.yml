@@ -41,7 +41,7 @@ openio_namespace_udp_allowed: "yes"
 openio_namespace_provision_only: "{{ openio_maintenance_mode | d(false) | bool }}"
 
 openio_namespace_storage_policy: "{{ namespace_storage_policy | d('THREECOPIES') }}"
-openio_namespace_chunk_size_megabytes: "{{ namespace_chunk_size_megabytes | d(100) | int }}"
+openio_namespace_chunk_size_megabytes: "{{ namespace_chunk_size_megabytes | d(1000) | int }}"
 openio_namespace_service_update_policy:
   - name: meta2
     policy: KEEP
